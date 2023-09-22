@@ -21,7 +21,7 @@ trait Reviewable
         }
         else
         {
-            return number_format((float)$this->reviews()->where('active',1)->avg('rating'),2);
+            return number_format((float)$this->reviews()->where('active',1)->avg('rating'),1);
         }
     }
 
@@ -30,12 +30,17 @@ trait Reviewable
         return $this->reviews()->where('active',1)->where('user_id', $user->id)->avg('rating');
     }
 
+    public function userHasRated($user)
+    {
+        return $this->reviews()->where('user_id', $user->id)->avg('rating');
+    }
+
     public function makeReview($user, $rating, $review=null)
     {
         return $this->reviews()->create([
             'review' => $review,
             'rating' => $rating,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
     }
     
